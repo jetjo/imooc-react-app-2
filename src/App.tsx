@@ -10,7 +10,7 @@ function App() {
     <div className="App">
       <ul>
         {/* render robots list */}
-        {robots.map(r => <Robot id={r.id} name={r.name} email={r.email} />)}
+        {robots.map(r => <Robot {...r} />)}
       </ul>
     </div>
   );
