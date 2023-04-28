@@ -1,0 +1,22 @@
+.container {
+  overflow: hidden;
+  background-color: hsl(0, 0%, 95%);
+}
+
+.card-set-box--grid {
+  margin: 1em auto;
+  display: inline-flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+
+.card {
+  margin: 0 0.5rem 1rem 0.5rem;
+  padding: .5em;
+  border-radius: .5em;
+  background-color: #fff;
+}
+
+.card:hover {
+  box-shadow: .2em .2em .75em rgba(0, 0, 0, 0.2);
+}

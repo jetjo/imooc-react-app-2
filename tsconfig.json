@@ -13,6 +13,9 @@
         "./src/*"
       ]
     },
+    "plugins": [
+      {"name": "typescript-plugin-css-modules"}
+    ],
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,

@@ -140,5 +140,8 @@
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "typescript-plugin-css-modules": "^5.0.1"
   }
 }
