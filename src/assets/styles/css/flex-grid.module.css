@@ -1,0 +1,11 @@
+.flex-grid {
+  padding: 1em;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+  /* background-color: hsl(0, 0%, 95%); */
+}
