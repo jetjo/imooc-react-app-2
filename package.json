@@ -142,6 +142,11 @@
     ]
   },
   "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-ext-replace": "^0.3.0",
+    "gulp-imagemin": "^8.0.0",
+    "imagemin": "^8.0.1",
+    "imagemin-webp": "^8.0.0",
     "typescript-plugin-css-modules": "^5.0.1"
   }
 }
