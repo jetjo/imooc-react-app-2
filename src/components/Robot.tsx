@@ -31,7 +31,7 @@ class Robot extends React.Component<RobotProps, {}>
     loadImg(this: React.Component<RobotProps, {}>)
     {
         const { id , groupId } = this.props;
-        const src = `https://robohash.org/${ 11 }`;
+        const src = `https://robohash.org/${ id }`;
         const img = new Image();
         const $img = document.getElementById(id + groupId);
         let loaded = false;
@@ -53,13 +53,13 @@ class Robot extends React.Component<RobotProps, {}>
                 $img.style.opacity = $img.style.opacity === '1' ? '0' : '1';
                 return;
             }
-            handler();
+            // handler();
         };
         $img?.addEventListener("transitionend", transitionHandler);
         img.addEventListener("load", (e) =>
         {
             loaded = true;
-            if (!transitioned) return;
+            // if (!transitioned) return;
             handler();
         });
         setTimeout(() =>
