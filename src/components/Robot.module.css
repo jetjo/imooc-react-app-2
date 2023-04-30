@@ -4,5 +4,9 @@
 
 .card-img {
     width: 250px;
-    height: auto;
+    height: 250px;
+    
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;
 }
