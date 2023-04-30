@@ -1,5 +1,6 @@
 .main {
   width: calc(1000px + 20em );
+  max-width: calc(100% - 2em);
 }
 
 .header {
@@ -17,5 +18,5 @@
 .header h1 {
   font-family: "Roboto";
   font-size: 5rem;
-  line-height: .2;
+  line-height: 1;
 }
