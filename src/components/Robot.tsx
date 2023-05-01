@@ -14,11 +14,10 @@ interface RobotProps
     groupId: string;
 }
 
-type lazyLoadArg = { $img?: HTMLElement, src?: string; }
+type lazyLoadArg = { $img?: HTMLElement, src?: string; };
 
 function lazyLoad({ $img, src }: lazyLoadArg)
 {
-    debugger;
     function imgLoadedHandler()
     {
         function transitionHandler()
@@ -28,32 +27,43 @@ function lazyLoad({ $img, src }: lazyLoadArg)
             $img.style.backgroundImage = `url(${ src })`;
             $img.style.opacity = `1`;
         };
-        if (!$img || loaded) return;
-        loaded = true;
+        if (!$img) return;
         $img.addEventListener("transitionend", transitionHandler);
         $img.style.opacity = `0`;
     }
-    let loaded = false;
+    let loaded = false, handled = false, mounted = false;
     if (!src) throw new Error('src 不能为空！');
     const img = new Image();
-    img.addEventListener("load", imgLoadedHandler);
+    img.addEventListener("load", () =>
+    {
+        loaded = true;
+        if (handled || !mounted) return;
+        imgLoadedHandler();
+        handled = true;
+    });
     img.src = src;
 
-    function lazyLoad ({ $img: $imgNew }: lazyLoadArg)
+    function lazyLoad({ $img: $imgNew }: lazyLoadArg)
     {
-        if (!$imgNew) return;// lazyLoad.bind(null);
-        // if ($img) return;// 不会发生
+        // if ($img) return;// 不会发生，即使由值也需要更新，因为可能不是一个节点了
         $img = $imgNew;
-        imgLoadedHandler();
+        mounted = true;
+        // if (handled || !loaded) return !$img ? lazyLoad : undefined;
+        if (!handled && loaded)
+        {
+            imgLoadedHandler();
+            handled = true;
+        }
+        return lazyLoad;// if (!$img)
     }
-
-    if (!$img) return lazyLoad.bind(null);
-    lazyLoad.call(null, {$img});
+    return lazyLoad;// if (!$img)
 }
 
 class Robot extends React.Component<RobotProps, {}>
 {
-    lazyLoad?: any; //typeof lazyLoad;
+    lazyLoad?: typeof lazyLoad;
+    isLazyLoaded: boolean = false;
+
     constructor(props)
     {
         super(props);
@@ -70,7 +80,7 @@ class Robot extends React.Component<RobotProps, {}>
     {
         const { id, groupId } = this.props;
         const $img = document.getElementById(id + groupId);
-        $img&& this.lazyLoad && this.lazyLoad({$img});
+        $img && this.lazyLoad && this.lazyLoad({ $img });
     }
 
     render(): React.ReactNode
@@ -78,14 +88,16 @@ class Robot extends React.Component<RobotProps, {}>
         // console.log('rendering...');
         const { name, email, id, groupId } = this.props;
         const src = `https://robohash.org/${ id }`;
-        // const $img = document.getElementById(id + groupId);//这是渲染之前的元素
-        this.lazyLoad = lazyLoad.call(null, { src });
+        // const $img = document.getElementById(id + groupId);//这是渲染之前的元素,再第一次渲染时肯定为空
+        !this.isLazyLoaded &&
+            // (this.isLazyLoaded = true) &&
+            (this.lazyLoad = lazyLoad({ src }));
 
-        const imgAttr = { id: id + groupId, opacity: 1, style: { backgroundImage: `url(${ loadingPic })` } };
+        const imgAttr = { id: id + groupId, opacity: 1, style: { backgroundImage: `url(${ this.isLazyLoaded ? src : loadingPic })` } };
+        this.isLazyLoaded = true;
 
         const boxStyle = [cardStyle.card, cardStyle["card-pic_-text--vertical"], style.card].join(' ');
         const singleLineStyle = [textStyle["text-center"], textStyle["text-hidden"]].join(' ');
-
         return (
             <div className={boxStyle}>
                 <div className={style["card-img"]} {...imgAttr} ></div>
