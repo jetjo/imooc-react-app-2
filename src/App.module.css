@@ -13,10 +13,16 @@
 
 .header-logo {
   width: 100px;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out 0s;
 }
 
 .header h1 {
-  font-family: "Roboto";
-  font-size: 5rem;
-  line-height: 1;
+  /* font-family: "Roboto"; */
+  /* font-size: 3.7rem;
+  font-weight: 900;
+  line-height: 1.82;
+  letter-spacing: .352em; */
+  opacity: 1;
+  transition: opacity 1.5s ease-in-out 0s;
 }
