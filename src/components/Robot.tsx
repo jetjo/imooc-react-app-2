@@ -14,8 +14,46 @@ interface RobotProps
     groupId: string;
 }
 
+type lazyLoadArg = { $img?: HTMLElement, src?: string; }
+
+function lazyLoad({ $img, src }: lazyLoadArg)
+{
+    debugger;
+    function imgLoadedHandler()
+    {
+        function transitionHandler()
+        {
+            if (!$img) return;
+            $img.removeEventListener("transitionend", transitionHandler);
+            $img.style.backgroundImage = `url(${ src })`;
+            $img.style.opacity = `1`;
+        };
+        if (!$img || loaded) return;
+        loaded = true;
+        $img.addEventListener("transitionend", transitionHandler);
+        $img.style.opacity = `0`;
+    }
+    let loaded = false;
+    if (!src) throw new Error('src 不能为空！');
+    const img = new Image();
+    img.addEventListener("load", imgLoadedHandler);
+    img.src = src;
+
+    function lazyLoad ({ $img: $imgNew }: lazyLoadArg)
+    {
+        if (!$imgNew) return;// lazyLoad.bind(null);
+        // if ($img) return;// 不会发生
+        $img = $imgNew;
+        imgLoadedHandler();
+    }
+
+    if (!$img) return lazyLoad.bind(null);
+    lazyLoad.call(null, {$img});
+}
+
 class Robot extends React.Component<RobotProps, {}>
 {
+    lazyLoad?: any; //typeof lazyLoad;
     constructor(props)
     {
         super(props);
@@ -28,51 +66,21 @@ class Robot extends React.Component<RobotProps, {}>
         this.loadImg.call(this);
     }
 
-    loadImg(this: React.Component<RobotProps, {}>)
+    loadImg()
     {
-        const { id , groupId } = this.props;
-        const src = `https://robohash.org/${ id }`;
-        const img = new Image();
+        const { id, groupId } = this.props;
         const $img = document.getElementById(id + groupId);
-        let loaded = false;
-        let transitioned = false;
-        const handler = () =>
-        {
-            if(!$img) return;
-            $img.removeEventListener("transitionend", transitionHandler);
-            $img.style.backgroundImage = `url(${ src })`;
-            $img.style.transitionDuration = '1s'
-            // $img.style.transitionDelay = '0s'
-            $img.style.opacity = '1';
-        }
-        function transitionHandler(e)
-        {
-            transitioned = true;
-            if (!loaded && $img)
-            {
-                $img.style.opacity = $img.style.opacity === '1' ? '0' : '1';
-                return;
-            }
-            // handler();
-        };
-        $img?.addEventListener("transitionend", transitionHandler);
-        img.addEventListener("load", (e) =>
-        {
-            loaded = true;
-            // if (!transitioned) return;
-            handler();
-        });
-        setTimeout(() =>
-        {
-            $img && ($img.style.opacity = '0')
-        }, 1000);
-        img.src = src;
+        $img&& this.lazyLoad && this.lazyLoad({$img});
     }
 
     render(): React.ReactNode
     {
-        console.log('rendering...');
+        // console.log('rendering...');
         const { name, email, id, groupId } = this.props;
+        const src = `https://robohash.org/${ id }`;
+        // const $img = document.getElementById(id + groupId);//这是渲染之前的元素
+        this.lazyLoad = lazyLoad.call(null, { src });
+
         const imgAttr = { id: id + groupId, opacity: 1, style: { backgroundImage: `url(${ loadingPic })` } };
 
         const boxStyle = [cardStyle.card, cardStyle["card-pic_-text--vertical"], style.card].join(' ');
