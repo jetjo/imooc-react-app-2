@@ -9,8 +9,8 @@ import boxStyle from './assets/styles/css/flex-grid.module.css';
 import cardStyle from './assets/styles/css/card.module.css';
 import layout from './App.module.css';
 import textStyle from './assets/styles/css/single-line.module.css';
-import { webFontLazyLoad } from './utils/lazy-load';
-import { v4 as uuidv4 } from 'uuid';
+// import { webFontLazyLoad } from './utils/lazy-load';
+// import { v4 as uuidv4 } from 'uuid';
 
 import { createTheme, NextUIProvider } from '@nextui-org/react';
 // 在NextUI后导入nextui-style-reset.css
@@ -19,11 +19,11 @@ import '@/assets/styles/nextui-style-reset.css';
 import ShoppingCar from './components/shopping-car';
 
 // const { loadFont, isLazyLoad } = webFontLazyLoad();
-const fontFamilyName = 'Newbee Black';
+// const fontFamilyName = 'Newbee Black';
 const TITLE = '罗伯特吊炸天机器人';
-const TEST_TEXT = '罗伯特';
-const id = uuidv4();
-const logoId = uuidv4();
+// const TEST_TEXT = '罗伯特';
+const id = window.h1_id; //uuidv4();
+const logoId = window.logo_id; //uuidv4();
 
 const theme = createTheme({
   type: "light", // it could be "light" or "dark"
@@ -59,28 +59,9 @@ const theme = createTheme({
 
 function App()
 {
-  const [ items, setItems ] = useState<any[]>([]);
-  const { loadFont, isLazyLoad } = webFontLazyLoad(layout['newbee-black--font-style'], {});//TODO: 开发模式下会连着执行两次渲染函数，所以移到此处
+  const [items, setItems] = useState<any[]>([]);
+  // const { loadFont, isLazyLoad } = webFontLazyLoad(layout['newbee-black--font-style'], {});//TODO: 开发模式下会连着执行两次渲染函数，所以移到此处
   // const h1Style = isLazyLoad() ? {} : { opacity: '1' };
-  loadFont(null, fontFamilyName, TEST_TEXT);
-  const timer = setInterval(() =>
-  {
-    const $ele = document.getElementById(id);
-    if (!$ele) return;
-    clearInterval(timer);
-    loadFont($ele, fontFamilyName, TEST_TEXT);
-  }, 100);
-  // const timer1 = setInterval(() =>
-  // {
-  //   const $logo = document.getElementById(logoId);
-  //   if ($logo)
-  //   {
-  //     $logo.style.opacity = '1';
-  //     clearInterval(timer1);
-  //   }
-  // }, 100);
-
-  // const h1Style = { fontFamily: fontFamilyName, fontSize: '5em', fontWeight: 'bold', lineHeight: '1', letterSpacing: '0' };
 
   return (
     <NextUIProvider theme={theme}>

@@ -79,7 +79,7 @@ function imgLazyLoad() {
       );
       img.addEventListener(
         "error",
-        () => !_isLazyLoaded && ((_isLazyLoaded = true), rej())
+        () => !_isLazyLoaded && ((_isLazyLoaded = true), console.error('图片加载失败！'), rej())
       );
       img.src = src;
     });
