@@ -1,6 +1,9 @@
 .card {
     width: 250px;
 }
+.card h2 {
+    /* font-size: 1.5em; */
+}
 
 .card-img {
     width: 250px;

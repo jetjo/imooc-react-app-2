@@ -12,6 +12,10 @@ import textStyle from './assets/styles/css/single-line.module.css';
 import { webFontLazyLoad } from './utils/lazy-load';
 import { v4 as uuidv4 } from 'uuid';
 
+import { NextUIProvider } from '@nextui-org/react';
+// 在NextUI后导入nextui-style-reset.css
+import '@/assets/styles/nextui-style-reset.css';
+
 const { loadFont, isLazyLoad } = webFontLazyLoad();
 const fontFamilyName = 'Newbee Black';
 const TITLE = '罗伯特吊炸天机器人';
@@ -40,20 +44,20 @@ function App()
     }
   }, 100);
 
-  const h1Style = { fontFamily: fontFamilyName , fontSize: '5em', fontWeight: 'bold', lineHeight: '1', letterSpacing: '0'}
+  const h1Style = { fontFamily: fontFamilyName, fontSize: '5em', fontWeight: 'bold', lineHeight: '1', letterSpacing: '0' };
 
   return (
-    <div>
-      <div className={layout.header}>
-        <img id={logoId} className={layout["header-logo"]} src={logo} alt="logo" />
-        <h1 id={id} className={textStyle['text-hidden']} style={h1Style}>{TITLE}</h1>
-      </div>
-      <div className={[boxStyle["flex-grid"], layout.main].join(' ')}>
-        {/* <TestHacker/> */}
-        {/* render robots list */}
-        <RobotGridFrame />
-      </div>
-    </div>
+    <NextUIProvider>
+        <div className={layout.header}>
+          <img id={logoId} className={layout["header-logo"]} src={logo} alt="logo" />
+          <h1 id={id} className={textStyle['text-hidden']} style={h1Style}>{TITLE}</h1>
+        </div>
+        <div className={[boxStyle["flex-grid"], layout.main].join(' ')}>
+          {/* <TestHacker/> */}
+          {/* render robots list */}
+          <RobotGridFrame />
+        </div>
+    </NextUIProvider>
   );
 }
 

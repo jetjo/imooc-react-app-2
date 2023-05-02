@@ -1,0 +1,13 @@
+/* nextui-style-reset.css */
+
+* {
+    box-sizing: content-box;
+}
+
+:root {
+    font-size: 16px;
+}
+
+body {
+    background-color: hsl(0, 0%, 95%);
+}

@@ -60,7 +60,7 @@ class Robot extends React.Component<RobotProps, {}>
         return (
             <div className={boxStyle}>
                 <div className={style["card-img"]} {...imgAttr} ></div>
-                <h2 className={singleLineStyle}>{name}</h2>
+                <h3 className={singleLineStyle}>{name}</h3>
                 <p className={singleLineStyle}>{email}</p>
             </div>
         );
