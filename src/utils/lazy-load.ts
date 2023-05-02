@@ -8,8 +8,7 @@ type lazyLoadArg = {
 
 function lazyLoad({ $img, setStyle, whenCanSetStyle }: lazyLoadArg) {
   function imgLoadedHandler() {
-    function transitionHandler()
-    {
+    function transitionHandler() {
       // if ($img?.tagName === 'H1')
       // {
       //   debugger
@@ -19,7 +18,9 @@ function lazyLoad({ $img, setStyle, whenCanSetStyle }: lazyLoadArg) {
       setStyle($img.style, isError);
       $img.style.opacity = `1`;
     }
-    if (!$img || isError) return;
+    // if (!$img || isError) return;
+    if (!$img || isError)
+      throw new Error("imgLoadedHandler函数必须传入$img参数！"); // TODO: $img如果是空，就不应该执行到此处！！！
     $img.addEventListener("transitionend", transitionHandler);
     $img.style.opacity = `0`;
   }
@@ -40,7 +41,9 @@ function lazyLoad({ $img, setStyle, whenCanSetStyle }: lazyLoadArg) {
         handled = true;
       });
 
-  function lazyLoad({ $img: $imgNew, setStyle: setStyleNew }: lazyLoadArg) {
+  function lazyLoad({ $img: $imgNew, setStyle: setStyleNew }: lazyLoadArg)
+  {
+    if (!$imgNew) throw new Error('lazyLoad函数必须传入$img参数！');
     // if ($img) return;// 不会发生，即使由值也需要更新，因为可能不是一个节点了
     $img = $imgNew;
     setStyle = setStyleNew;
@@ -108,7 +111,7 @@ function imgLazyLoad() {
   return Object.freeze({ loadImg, isLazyLoaded: () => _isLazyLoaded });
 }
 
-function webFontLazyLoad() {
+function webFontLazyLoad(loadedClassName, loadedStyle = {}) {
   function setStyle(
     style?: CSSStyleDeclaration,
     $ele?: HTMLElement | null,
@@ -119,36 +122,41 @@ function webFontLazyLoad() {
     if (fontError || !fontFamilyName) return;
     if (style) {
       style.fontFamily = fontFamilyName;
-      style.fontSize = '5rem';
-      style.fontWeight = 'bold';
-      style.lineHeight = '1'
-      style.letterSpacing = '0'
+      Object.assign(style, loadedStyle);
     }
     if ($ele) {
       $ele.style.fontFamily = fontFamilyName;
-      $ele.style.fontSize = "5rem";
-      $ele.style.fontWeight = "bold";
-      $ele.style.lineHeight = '1'
-      $ele.style.letterSpacing = '0'
+      $ele.classList.add(loadedClassName);
     }
   }
 
   function whenCanSetStyle(
     fontFamilyName: string,
     testText: string | null = null,
-    opts = { weight: 400 }
+    opts = { weight: 'bold', size: '5rem' }
   ) {
-    return new Promise<void>((res, rej) => {
+    return new Promise<void>((res, rej) =>
+    {
       if (!fontFamilyName) throw new Error("fontFamilyName 不能为空！");
-      const font = new FontFaceObserver(fontFamilyName, opts);
-      font
-        .load(testText, 9000) //, 5000)
-        .then(() => {
+      // const font = new FontFaceObserver(fontFamilyName, opts);
+      // font.load(testText, 9000); //, 5000)
+      if (sessionStorage.getItem(fontFamilyName))
+      {
+        _isLazyLoaded = true;
+        res();
+        return;
+      }
+      if (!('fonts' in document)) return rej('低版本浏览器不支持document.fonts属性！');
+      document.fonts
+        .load(`${opts.weight} ${opts.size} '${fontFamilyName}'`)
+        .then((fontFace) => {
+          console.log({ fontFace });
+          sessionStorage.setItem(fontFamilyName, '1');
           res();
         })
-        .catch((e) => {
-          alert(JSON.stringify(e));
-          rej();
+        .catch((err) => {
+          console.error(err);
+          rej(err);
         })
         .finally(() => {
           _isLazyLoaded = true;

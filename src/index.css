@@ -15,7 +15,9 @@ code {
 
 @font-face {
   font-family: 'Newbee Black';
-  font-display: swap;
-  src: url(./assets//fonts//站酷高端黑\ Regular-subset/EvMNoAZycDnV.woff) format('woff'), 
-  url(./assets/fonts//站酷高端黑\ Regular-subset/EvMNoAZycDnV.woff2) format('woff2');
+  /* font-display: fallback; */
+  font-display: block;
+  /* font-display: swap; */
+  src: url(./assets//fonts//站酷高端黑\ Regular-subset/EvMNoAZycDnV.woff.bak) format('woff'), 
+  url(./assets/fonts//站酷高端黑\ Regular-subset/EvMNoAZycDnV.woff2.bak) format('woff2');
 }
