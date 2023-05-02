@@ -7,12 +7,18 @@ import loadingPic from "@/assets/images/Spinner-1s-200px.gif";
 
 import { imgLazyLoad } from '@/utils/lazy-load';
 
+import { Button } from '@nextui-org/react';
+
 interface RobotProps
 {
     name: string;
     email: string;
     id: number;
     groupId: string;
+    // addToCar: {
+    //     (id: number): void;
+    // }
+    addToCar: (id: number) => void
 }
 
 class Robot extends React.Component<RobotProps, {}>
@@ -41,7 +47,7 @@ class Robot extends React.Component<RobotProps, {}>
     render(): React.ReactNode
     {
         console.log('rendering...');
-        const { name, email, id, groupId } = this.props;
+        const { name, email, id, groupId, addToCar } = this.props;
         const src = `https://robohash.org/${ id }`;
         // const $img = document.getElementById(id + groupId);//这是渲染之前的元素,再第一次渲染时肯定为空
 
@@ -62,6 +68,7 @@ class Robot extends React.Component<RobotProps, {}>
                 <div className={style["card-img"]} {...imgAttr} ></div>
                 <h3 className={singleLineStyle}>{name}</h3>
                 <p className={singleLineStyle}>{email}</p>
+                <Button onPress={() => addToCar(id) } size='xs' auto>Add to 🛒</Button>
             </div>
         );
     }

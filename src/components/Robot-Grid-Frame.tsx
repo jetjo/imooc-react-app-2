@@ -5,13 +5,37 @@ import { v4 as uuidv4 } from 'uuid';
 
 const groupId = uuidv4();
 
-const RobotGridFrame = () => (<>{
+interface Item
+{
+    name: string;
+    email: string;
+    id: number;
+    groupId: string;
+}
+
+interface Prop
+{
+    addToCar: {
+        (id: number): void;
+        (item: Item | (typeof robots)[0]): void;
+    };
+}
+
+const RobotGridFrame: React.FC<Prop> = ({ addToCar }) => (<>{
     robots.map((r, i) =>
         <Robot
             key={i}
             {...r}
-            id={parseInt((Math.random() * 1000000).toString())}
             groupId={groupId}
+
+            addToCar={
+                (id) =>
+                {
+                    const item = robots.find(e => e.id === id);
+                    if (!item) return;
+                    addToCar(item);
+                }
+            }
         />
     )
 }</>);

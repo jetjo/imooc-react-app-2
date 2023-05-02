@@ -1,7 +1,12 @@
 // shopping-car.tsx
 import React, { Component } from 'react';
+import { Button } from '@nextui-org/react';
+import style from './shopping-car.module.css';
 
-interface Prop { }
+interface Prop
+{
+    items: any[];
+}
 interface State
 {
     expand: boolean;
@@ -14,19 +19,34 @@ class ShoppingCar extends Component<Prop, State>
     {
         super(props);
         this.state = {
-            expand: false
+            expand: false,
+            // items: []
         };
+    }
+
+    showCar()
+    {
+        this.setState({ expand: !this.state.expand });
     }
 
     render(): React.ReactNode
     {
+        const carClass = this.state.expand ?
+            [style['item-list'], style['item-list--active']].join(' ') :
+            style['item-list'];
         return (
-            <div>
-                
+            <div className={style['shopping-car']}>
+                <Button onPress={() => this.showCar()} auto>我的购物车</Button>
+                <ul className={carClass}>
+                    {
+                        this.props.items.map(({ item, index: id }, index) => (
+                            <li key={index}>{item.name}</li>
+                        ))
+                    }
+                </ul>
             </div>
         );
     }
-
 }
 
 export default ShoppingCar;
