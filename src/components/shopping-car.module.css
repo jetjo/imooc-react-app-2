@@ -12,7 +12,11 @@
   width: 100%;
   max-width: 30rem;
   margin: 0 auto;
-  position: relative;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  z-index: 9;
 }
 
 .item-list {
@@ -24,6 +28,14 @@
     display: none;
     position: absolute;
     top: 60px;
+    background-color: #fff;
+    padding: .5em 1em;
+}
+
+.item-list li {
+  border-bottom: 1px solid #ccc;
+  line-height: 2.5;
+  margin-bottom: 0;
 }
 
 .item-list--active {

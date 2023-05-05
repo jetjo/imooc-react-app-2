@@ -35,6 +35,7 @@
       }
 
     </style>
+
     <script src="./lazy-load.js"></script>
     <script type="module">
       // import lazyLoad  from './lazy-load.js';
@@ -70,7 +71,29 @@
 
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+
+    <script>
+      const domMutationObsConf = { attributes: false, childList: true, subtree: true };
+
+      const domObs = new MutationObserver( ( mutationList ) =>
+      {
+        for ( const mutation of mutationList )
+        {
+          console.log( 'dom node update: ', mutation );
+        }
+      } );
+
+      domObs.observe( window.document.body, domMutationObsConf );
+
+      window.addEventListener( 'unload', () =>
+      {
+        window.alert( 'unload?' );
+        domObs.disconnect();
+      } );
+
+    </script>
     <div id="root"></div>
+
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

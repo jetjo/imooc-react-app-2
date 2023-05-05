@@ -8,17 +8,25 @@ type lazyLoadArg = {
 
 function lazyLoad({ $img, setStyle, whenCanSetStyle }: lazyLoadArg) {
   function imgLoadedHandler() {
-    function transitionHandler() {
-      // if ($img?.tagName === 'H1')
-      // {
-      //   debugger
-      // }
-      if (!$img || !setStyle) return;
+    function transitionHandler(this: HTMLElement) {
+      // if ($img?.tagName === 'H1') debugger
+      if (!$img || !setStyle) {
+        if (
+          this instanceof window.EventTarget &&
+          this.style instanceof window.CSSStyleDeclaration
+        ) {
+          this.removeEventListener("transitionend", transitionHandler);
+          setStyle && setStyle(this.style, isError);
+          this.style.opacity = "1";
+        }
+        throw new Error("something is wrong!!!");
+      }
       $img.removeEventListener("transitionend", transitionHandler);
       setStyle($img.style, isError);
       $img.style.opacity = `1`;
     }
     // if (!$img || isError) return;
+
     if (!$img || isError)
       throw new Error("imgLoadedHandler函数必须传入$img参数！"); // TODO: $img如果是空，就不应该执行到此处！！！
     $img.addEventListener("transitionend", transitionHandler);
@@ -41,9 +49,9 @@ function lazyLoad({ $img, setStyle, whenCanSetStyle }: lazyLoadArg) {
         handled = true;
       });
 
-  function lazyLoad({ $img: $imgNew, setStyle: setStyleNew }: lazyLoadArg)
-  {
-    if (!$imgNew) throw new Error('lazyLoad函数必须传入$img参数！');
+  function lazyLoad({ $img: $imgNew, setStyle: setStyleNew }: lazyLoadArg) {
+    if ($img) throw new Error("不支持给非空的节点引用$img重新赋值！");
+    if (!$imgNew) throw new Error("lazyLoad函数必须传入$img参数！");
     // if ($img) return;// 不会发生，即使由值也需要更新，因为可能不是一个节点了
     $img = $imgNew;
     setStyle = setStyleNew;
@@ -59,8 +67,7 @@ function lazyLoad({ $img, setStyle, whenCanSetStyle }: lazyLoadArg) {
 }
 
 function imgLazyLoad() {
-  function setStyle(style, $img, src, isError)
-  {
+  function setStyle(style, $img, src, isError) {
     if (isError) return;
     if (style) {
       style.backgroundImage = `url(${src})`;
@@ -79,7 +86,9 @@ function imgLazyLoad() {
       );
       img.addEventListener(
         "error",
-        () => !_isLazyLoaded && ((_isLazyLoaded = true), console.error('图片加载失败！'), rej())
+        () =>
+          !_isLazyLoaded &&
+          ((_isLazyLoaded = true), console.error("图片加载失败！"), rej())
       );
       img.src = src;
     });
@@ -117,8 +126,7 @@ function webFontLazyLoad(loadedClassName, loadedStyle = {}) {
     $ele?: HTMLElement | null,
     fontFamilyName?: string,
     fontError?: boolean
-  )
-  {
+  ) {
     if (fontError || !fontFamilyName) return;
     if (style) {
       style.fontFamily = fontFamilyName;
@@ -133,25 +141,24 @@ function webFontLazyLoad(loadedClassName, loadedStyle = {}) {
   function whenCanSetStyle(
     fontFamilyName: string,
     testText: string | null = null,
-    opts = { weight: 'bold', size: '5rem' }
+    opts = { weight: "bold", size: "5rem" }
   ) {
-    return new Promise<void>((res, rej) =>
-    {
+    return new Promise<void>((res, rej) => {
       if (!fontFamilyName) throw new Error("fontFamilyName 不能为空！");
       // const font = new FontFaceObserver(fontFamilyName, opts);
       // font.load(testText, 9000); //, 5000)
-      if (sessionStorage.getItem(fontFamilyName))
-      {
+      if (sessionStorage.getItem(fontFamilyName)) {
         _isLazyLoaded = true;
         res();
         return;
       }
-      if (!('fonts' in document)) return rej('低版本浏览器不支持document.fonts属性！');
+      if (!("fonts" in document))
+        return rej("低版本浏览器不支持document.fonts属性！");
       document.fonts
         .load(`${opts.weight} ${opts.size} '${fontFamilyName}'`)
         .then((fontFace) => {
           console.log({ fontFace });
-          sessionStorage.setItem(fontFamilyName, '1');
+          sessionStorage.setItem(fontFamilyName, "1");
           res();
         })
         .catch((err) => {
@@ -164,8 +171,7 @@ function webFontLazyLoad(loadedClassName, loadedStyle = {}) {
     });
   }
 
-  function loadFont($ele, fontFamilyName, testText)
-  {
+  function loadFont($ele, fontFamilyName, testText) {
     if (!isLazyLoad) {
       _lazyLoad = lazyLoad({
         whenCanSetStyle: () => whenCanSetStyle(fontFamilyName, testText),

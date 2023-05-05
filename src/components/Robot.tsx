@@ -41,7 +41,7 @@ class Robot extends React.Component<RobotProps, {}>
         const { id, groupId } = this.props;
         const src = `https://robohash.org/${ id }`;
         const $img = document.getElementById(id + groupId);
-        this.loadImg($img, src);
+        // this.loadImg($img, src);
     }
 
     render(): React.ReactNode
@@ -59,7 +59,7 @@ class Robot extends React.Component<RobotProps, {}>
                 backgroundImage: `url(${ (this.isLazyLoaded && this.isLazyLoaded()) ? src : loadingPic })`
             }
         };
-        this.loadImg(null, src);
+        // this.loadImg(null, src);
 
         const boxStyle = [cardStyle.card, cardStyle["card-pic_-text--vertical"], style.card].join(' ');
         const singleLineStyle = [textStyle["text-center"], textStyle["text-hidden"]].join(' ');
