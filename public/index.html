@@ -73,12 +73,16 @@
     <noscript>You need to enable JavaScript to run this app.</noscript>
 
     <script>
+      window.nodeResourceLazyLoadQueue = [];
       const domMutationObsConf = { attributes: false, childList: true, subtree: true };
 
       const domObs = new MutationObserver( ( mutationList ) =>
       {
+        console.log('节点更新！');
+        const cbs = [...window.nodeResourceLazyLoadQueue];
         for ( const mutation of mutationList )
         {
+          cbs.forEach(cb => cb(mutation));
           console.log( 'dom node update: ', mutation );
         }
       } );

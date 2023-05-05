@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import cardStyle from '../assets/styles/css/card.module.css';
 import style from './Robot.module.css';
 import textStyle from '../assets/styles/css/single-line.module.css';
@@ -18,60 +18,36 @@ interface RobotProps
     // addToCar: {
     //     (id: number): void;
     // }
-    addToCar: (id: number) => void
+    addToCar: (id: number) => void;
 }
 
-class Robot extends React.Component<RobotProps, {}>
+const Robot: React.FC<RobotProps> = ({ name, email, id, groupId, addToCar }) =>
 {
-    loadImg: ReturnType<typeof imgLazyLoad>['loadImg'];
-    isLazyLoaded?: ReturnType<typeof imgLazyLoad>['isLazyLoaded'];
-    constructor(props)
-    {
-        super(props);
-        this.state = {};
-        // this.loadImg.call(this);
-        const { loadImg, isLazyLoaded } = imgLazyLoad();
-        this.loadImg = loadImg;
-        this.isLazyLoaded = isLazyLoaded;
-    }
+    const $img = useRef<HTMLImageElement>(null);
+    const src = `https://robohash.org/${ id }`;
 
-    componentDidMount(): void
-    {
-        console.log('mounted!!!');
-        const { id, groupId } = this.props;
-        const src = `https://robohash.org/${ id }`;
-        const $img = document.getElementById(id + groupId);
-        // this.loadImg($img, src);
-    }
+    imgLazyLoad(() => $img.current, src);
+    console.log('rendering...');
 
-    render(): React.ReactNode
-    {
-        console.log('rendering...');
-        const { name, email, id, groupId, addToCar } = this.props;
-        const src = `https://robohash.org/${ id }`;
-        // const $img = document.getElementById(id + groupId);//这是渲染之前的元素,再第一次渲染时肯定为空
+    const imgAttr = {
+        id: id + groupId,
+        opacity: 1,
+        style: {
+            // backgroundImage: `url(${ this.lazyLoad ? src : loadingPic })`
+            backgroundImage: `url(${ loadingPic })`
+        }
+    };
 
-        const imgAttr = {
-            id: id + groupId,
-            opacity: 1,
-            style: {
-                // backgroundImage: `url(${ this.lazyLoad ? src : loadingPic })`
-                backgroundImage: `url(${ (this.isLazyLoaded && this.isLazyLoaded()) ? src : loadingPic })`
-            }
-        };
-        // this.loadImg(null, src);
-
-        const boxStyle = [cardStyle.card, cardStyle["card-pic_-text--vertical"], style.card].join(' ');
-        const singleLineStyle = [textStyle["text-center"], textStyle["text-hidden"]].join(' ');
-        return (
-            <div className={boxStyle}>
-                <div className={style["card-img"]} {...imgAttr} ></div>
-                <h3 className={singleLineStyle}>{name}</h3>
-                <p className={singleLineStyle}>{email}</p>
-                <Button onPress={() => addToCar(id) } size='xs' auto>Add to 🛒</Button>
-            </div>
-        );
-    }
+    const boxStyle = [cardStyle.card, cardStyle["card-pic_-text--vertical"], style.card].join(' ');
+    const singleLineStyle = [textStyle["text-center"], textStyle["text-hidden"]].join(' ');
+    return (
+        <div className={boxStyle}>
+            <div ref={$img} className={style["card-img"]} {...imgAttr} ></div>
+            <h3 className={singleLineStyle}>{name}</h3>
+            <p className={singleLineStyle}>{id}</p>
+            <Button onPress={() => addToCar(id)} size='xs' auto>Add to 🛒</Button>
+        </div>
+    );
 };
 
 export default Robot;
