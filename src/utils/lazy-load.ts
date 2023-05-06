@@ -133,7 +133,6 @@ function imgLazyLoad(imgGet: () => HTMLImageElement | null, src: string) {
 
   let _lazyLoad: typeof lazyLoad;
 
-  debugger
   const $img = imgGet();
   if (!$img || ($img.src !== src && $img.style.backgroundImage.indexOf(src) === -1)) {loadImg(null, src);}
 

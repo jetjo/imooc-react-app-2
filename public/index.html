@@ -78,12 +78,12 @@
 
       const domObs = new MutationObserver( ( mutationList ) =>
       {
-        console.log('节点更新！');
+        // console.log('节点更新！');
         const cbs = [...window.nodeResourceLazyLoadQueue];
         for ( const mutation of mutationList )
         {
           cbs.forEach(cb => cb(mutation));
-          console.log( 'dom node update: ', mutation );
+          // console.log( 'dom node update: ', mutation );
         }
       } );
 
