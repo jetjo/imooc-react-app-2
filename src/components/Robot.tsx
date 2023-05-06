@@ -15,13 +15,13 @@ interface RobotProps
     email: string;
     id: number;
     groupId: string;
-    // addToCar: {
-    //     (id: number): void;
-    // }
+    onChange: {
+        (id: number): void;
+    }
     addToCar: (id: number) => void;
 }
 
-const Robot: React.FC<RobotProps> = ({ name, email, id, groupId, addToCar }) =>
+const Robot: React.FC<RobotProps> = ({ name, email, id, groupId, onChange, addToCar }) =>
 {
     const $img = useRef<HTMLImageElement>(null);
     const src = `https://robohash.org/${ id }`;
@@ -41,7 +41,9 @@ const Robot: React.FC<RobotProps> = ({ name, email, id, groupId, addToCar }) =>
     const boxStyle = [cardStyle.card, cardStyle["card-pic_-text--vertical"], style.card].join(' ');
     const singleLineStyle = [textStyle["text-center"], textStyle["text-hidden"]].join(' ');
     return (
-        <div className={boxStyle}>
+        <div
+            onClick={() => onChange(id)}
+            className={boxStyle}>
             <div ref={$img} className={style["card-img"]} {...imgAttr} ></div>
             <h3 className={singleLineStyle}>{name}</h3>
             <p className={singleLineStyle}>{id}</p>

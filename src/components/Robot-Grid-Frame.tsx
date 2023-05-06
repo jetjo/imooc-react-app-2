@@ -31,14 +31,22 @@ const RobotGridFrame: React.FC<Prop> = ({ addToCar }) =>
                 {...r}
                 groupId={groupId}
 
-                addToCar={
+                onChange={
                     (id) =>
                     {
                         const item = robots.find(e => e.id === id);
                         if (!item) return;
                         const i = robots.indexOf(item);
                         setRobots([...robots.slice(0, i), { ...item, id: parseInt((Math.random() * 10000) + '') }, ...robots.slice(i + 1)]);
-                        // addToCar(item);
+                    }
+                }
+
+                addToCar={
+                    (id) =>
+                    {
+                        const item = robots.find(e => e.id === id);
+                        if (!item) return;
+                        addToCar(item);
                     }
                 }
             />
