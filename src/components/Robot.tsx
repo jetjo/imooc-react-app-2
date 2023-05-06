@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useEffect, useRef, useState } from 'react';
 import cardStyle from '../assets/styles/css/card.module.css';
@@ -38,13 +39,13 @@ const Robot: React.FC<RobotProps> = ({ name, email, id, groupId, onChange, addTo
         }
     };
 
-    const boxStyle = [cardStyle.card, cardStyle["card-pic_-text--vertical"], style.card].join(' ');
-    const singleLineStyle = [textStyle["text-center"], textStyle["text-hidden"]].join(' ');
+    const boxStyle = [cardStyle.card, cardStyle.cardVerticalPicTextStyle, style.card].join(' ');
+    const singleLineStyle = [textStyle.textCenter, textStyle.textHidden].join(' ');
     return (
         <div
             onClick={() => onChange(id)}
             className={boxStyle}>
-            <div ref={$img} className={style["card-img"]} {...imgAttr} ></div>
+            <div ref={$img} className={style.cardImg} {...imgAttr} ></div>
             <h3 className={singleLineStyle}>{name}</h3>
             <p className={singleLineStyle}>{id}</p>
             <Button onPress={() => addToCar(id)} size='xs' auto>Add to 🛒</Button>

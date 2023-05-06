@@ -1,4 +1,4 @@
-import FontFaceObserver from "fontfaceobserver";
+// import FontFaceObserver from "fontfaceobserver";
 
 type lazyLoadArg = {
   $img?: HTMLElement | null;

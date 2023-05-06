@@ -66,11 +66,11 @@ function App()
   return (
     <NextUIProvider theme={theme}>
       <div className={layout.header}>
-        <img id={logoId} className={layout["header-logo"]} src={logo} alt="logo" />
-        <h1 id={id} className={textStyle['text-hidden']} >{TITLE}</h1>
+        <img id={logoId} className={layout.headerLogo} src={logo} alt="logo" />
+        <h1 id={id} className={textStyle.textHidden} >{TITLE}</h1>
       </div>
       <ShoppingCar items={ items } />
-      <div className={[boxStyle["flex-grid"], layout.main].join(' ')}>
+      <div className={[boxStyle.flexGrid, layout.main].join(' ')}>
         {/* <TestHacker/> */}
         {/* render robots list */}
         <RobotGridFrame addToCar={

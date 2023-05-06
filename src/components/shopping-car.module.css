@@ -1,6 +1,6 @@
 /* shopping-car.module.css */
 
-.shopping-car {
+.shoppingCar {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -19,7 +19,7 @@
   z-index: 9;
 }
 
-.item-list {
+.itemList {
     border: 1px solid var(--nextui-colors-primary);
     border-radius: .5em;
     max-height: 200px;
@@ -32,12 +32,12 @@
     padding: .5em 1em;
 }
 
-.item-list li {
+.itemList li {
   border-bottom: 1px solid #ccc;
   line-height: 2.5;
   margin-bottom: 0;
 }
 
-.item-list--active {
+.itemListActive {
     display: block;
 }

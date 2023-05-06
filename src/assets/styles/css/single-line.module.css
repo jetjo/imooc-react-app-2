@@ -1,9 +1,9 @@
-.text-hidden {
+.textHidden {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-.text-center {
+.textCenter {
     text-align: center;
 }

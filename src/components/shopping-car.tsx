@@ -32,10 +32,10 @@ class ShoppingCar extends Component<Prop, State>
     render(): React.ReactNode
     {
         const carClass = this.state.expand ?
-            [style['item-list'], style['item-list--active']].join(' ') :
-            style['item-list'];
+            [style.itemList, style.itemListActive].join(' ') :
+            style.itemList;
         return (
-            <div className={style['shopping-car']}>
+            <div className={style.shoppingCar}>
                 <Button onPress={() => this.showCar()} auto>我的购物车</Button>
                 <ul className={carClass}>
                     {
