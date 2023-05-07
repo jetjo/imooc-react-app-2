@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import _robots from '@/mock-data/robots.json';
+import React, { useEffect, useState } from "react";
+// import _robots from '@/mock-data/robots.json';
 import Robot from "./Robot";
 import { v4 as uuidv4 } from 'uuid';
+import { list } from '@/api/user'
 
 const groupId = uuidv4();
 
@@ -17,13 +18,22 @@ interface Prop
 {
     addToCar: {
         (id: number): void;
-        (item: Item | (typeof _robots)[0]): void;
+        (item: Item | any): void;
     };
 }
 
 const RobotGridFrame: React.FC<Prop> = ({ addToCar }) =>
 {
-    const [robots, setRobots] = useState<any[]>(_robots);
+    const [robots, setRobots] = useState<any[]>([]);
+    useEffect(() =>
+    {
+        const getUsers = async () =>
+        {
+            const data = await list();
+            data && setRobots([...data.data])
+        }
+        getUsers();
+    }, []);
     return (<>{
         robots.map((r, i) =>
             <Robot
