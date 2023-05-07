@@ -8,7 +8,7 @@ type lazyLoadArg = {
 
 function lazyLoad({ $img, setStyle, whenCanSetStyle }: lazyLoadArg) {
   function imgLoadedHandler() {
-    function transitionHandler(this: HTMLElement) {
+    function transitionHandler(this: HTMLElement | null | undefined) {
       // if ($img?.tagName === 'H1') debugger
       if (!$img || !setStyle) {
         if (
@@ -28,6 +28,9 @@ function lazyLoad({ $img, setStyle, whenCanSetStyle }: lazyLoadArg) {
     // if (!$img || isError) return;
     if (!$img || isError)
       throw new Error("imgLoadedHandler函数必须传入$img参数！"); // TODO: $img如果是空，就不应该执行到此处！！！
+    setTimeout(() => {
+      transitionHandler.call($img);
+    }, 500);
     $img.addEventListener("transitionend", transitionHandler);
     $img.style.opacity = `0`;
   }
@@ -108,8 +111,8 @@ function imgLazyLoad(imgGet: () => HTMLImageElement | null, src: string) {
           (e) => e === nodeMutationHandler
         );
         // setTimeout(() => {
-          // 这个Handler是在for循环中调用的，如果同步删除，会导致后面紧接着的Handler无法执行
-          window.nodeResourceLazyLoadQueue.splice(i, 1);
+        // 这个Handler是在for循环中调用的，如果同步删除，会导致后面紧接着的Handler无法执行
+        window.nodeResourceLazyLoadQueue.splice(i, 1);
         // }, 0);
         break;
       }
@@ -134,7 +137,12 @@ function imgLazyLoad(imgGet: () => HTMLImageElement | null, src: string) {
   let _lazyLoad: typeof lazyLoad;
 
   const $img = imgGet();
-  if (!$img || ($img.src !== src && $img.style.backgroundImage.indexOf(src) === -1)) {loadImg(null, src);}
+  if (
+    !$img ||
+    ($img.src !== src && $img.style.backgroundImage.indexOf(src) === -1)
+  ) {
+    loadImg(null, src);
+  }
 
   // return Object.freeze({ loadImg, isLazyLoaded: () => _isLazyLoaded });
 }

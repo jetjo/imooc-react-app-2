@@ -30,7 +30,7 @@ function lazyLoad ( _a )
       throw new Error( "imgLoadedHandler函数必须传入$img参数！" ); // TODO: $img如果是空，就不应该执行到此处！！！
     setTimeout(() => {
       transitionHandler.call( $img );
-    }, 1000);
+    }, 500);
     $img.addEventListener( "transitionend", transitionHandler );
     $img.style.opacity = "0";
     // window.alert('开始过渡效果...')
