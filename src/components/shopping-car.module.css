@@ -19,17 +19,28 @@
   z-index: 9;
 }
 
+.shoppingCar div {
+  align-items: center;
+}
+
+.shoppingCar .icon {
+  margin-right: 0.5rem;
+  color: var(--nextui-colors-primary);
+  font-weight: 700;
+  font-size: 2rem;
+}
+
 .itemList {
-    border: 1px solid var(--nextui-colors-primary);
-    border-radius: .5em;
-    max-height: 200px;
-    overflow-y: auto;
-    /* visibility: hidden; */
-    display: none;
-    position: absolute;
-    top: 60px;
-    background-color: #fff;
-    padding: .5em 1em;
+  border: 1px solid var(--nextui-colors-primary);
+  border-radius: 0.5em;
+  max-height: 200px;
+  overflow-y: auto;
+  /* visibility: hidden; */
+  display: none;
+  position: absolute;
+  top: 60px;
+  background-color: #fff;
+  padding: 0.5em 1em;
 }
 
 .itemList li {
@@ -39,5 +50,5 @@
 }
 
 .itemListActive {
-    display: block;
+  display: block;
 }

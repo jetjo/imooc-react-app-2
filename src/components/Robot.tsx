@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable jsx-a11y/alt-text */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useContext } from 'react';
 import cardStyle from '../assets/styles/css/card.module.css';
 import style from './Robot.module.css';
 import textStyle from '../assets/styles/css/single-line.module.css';
 import loadingPic from "@/assets/images/Spinner-1s-200px.gif";
+import { appSetterContext } from '@/App.context';
 
 import { imgLazyLoad } from '@/utils/lazy-load';
 
@@ -18,12 +19,14 @@ interface RobotProps
     groupId: string;
     onChange: {
         (id: number): void;
-    }
+    };
     addToCar: (id: number) => void;
+    item: { item: any, index: number; };
 }
 
-const Robot: React.FC<RobotProps> = ({ name, email, id, groupId, onChange, addToCar }) =>
+const Robot: React.FC<RobotProps> = ({ name, email, id, groupId, onChange, addToCar, item }) =>
 {
+    const shoppingCarDispatch = useContext(appSetterContext);
     const $img = useRef<HTMLImageElement>(null);
     const src = `https://robohash.org/${ id }`;
 
@@ -48,7 +51,17 @@ const Robot: React.FC<RobotProps> = ({ name, email, id, groupId, onChange, addTo
             <div ref={$img} className={style.cardImg} {...imgAttr} ></div>
             <h3 className={singleLineStyle}>{name}</h3>
             <p className={singleLineStyle}>{id}</p>
-            <Button onPress={() => addToCar(id)} size='xs' auto>Add to 🛒</Button>
+            <Button onPress={() =>
+            {
+                if (shoppingCarDispatch)
+                {
+                    shoppingCarDispatch({ shoppingCar: { type: 'AddToShoppingCar', id: -1, index: -1, data: { ...item } } });
+                }
+                else
+                {
+                    addToCar(id);
+                }
+            }} size='xs' auto>Add to 🛒</Button>
         </div>
     );
 };

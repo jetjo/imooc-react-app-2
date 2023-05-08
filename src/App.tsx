@@ -18,6 +18,8 @@ import '@/assets/styles/nextui-style-reset.css';
 
 import ShoppingCar from './components/shopping-car';
 
+import AppStateProvider from './App.context';
+
 // const { loadFont, isLazyLoad } = webFontLazyLoad();
 // const fontFamilyName = 'Newbee Black';
 const TITLE = '罗伯特吊炸天机器人';
@@ -66,26 +68,28 @@ function App()
   // const items = [];
   // function setItems()
   // {
-    
+
   // }
   return (
     <NextUIProvider theme={theme}>
-      <div className={layout.header}>
-        <img id={logoId} className={layout.headerLogo} src={logo} alt="logo" />
-        <h1 id={id} className={textStyle.textHidden} >{TITLE}</h1>
-      </div>
-      <ShoppingCar items={ items } />
-      <div className={[boxStyle.flexGrid, layout.main].join(' ')}>
-        {/* <TestHacker/> */}
-        {/* render robots list */}
-        <RobotGridFrame addToCar={
-          (item) => 
-          {
-            // items.push({ item, index: items.length });
-            setItems([...items, { item, index: items.length }]);
-          }
-        } />
-      </div>
+      <AppStateProvider>
+        <div className={layout.header}>
+          <img id={logoId} className={layout.headerLogo} src={logo} alt="logo" />
+          <h1 id={id} className={textStyle.textHidden} >{TITLE}</h1>
+        </div>
+        <ShoppingCar items={items} />
+        <div className={[boxStyle.flexGrid, layout.main].join(' ')}>
+          {/* <TestHacker/> */}
+          {/* render robots list */}
+          <RobotGridFrame addToCar={
+            (item) => 
+            {
+              // items.push({ item, index: items.length });
+              setItems([...items, { item, index: items.length }]);
+            }
+          } />
+        </div>
+      </AppStateProvider>
     </NextUIProvider>
   );
 }

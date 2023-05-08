@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 // import _robots from '@/mock-data/robots.json';
 import Robot from "./Robot";
 import { v4 as uuidv4 } from 'uuid';
-import { list } from '@/api/user'
+import { list } from '@/api/user';
 
 const groupId = uuidv4();
 
@@ -30,13 +30,14 @@ const RobotGridFrame: React.FC<Prop> = ({ addToCar }) =>
         const getUsers = async () =>
         {
             const data = await list();
-            data && setRobots([...data.data])
-        }
+            data && setRobots([...data.data]);
+        };
         getUsers();
     }, []);
     return (<>{
         robots.map((r, i) =>
             <Robot
+                item={{ item: r, index: i }}
                 key={r.id}
                 {...r}
                 groupId={groupId}

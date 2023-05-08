@@ -2,6 +2,9 @@
 import React, { Component } from 'react';
 import { Button } from '@nextui-org/react';
 import style from './shopping-car.module.css';
+import flexStyle from '../assets/styles/css/flex-row.module.css';
+import { FiShoppingCart } from "react-icons/fi";
+import { appContext } from '@/App.context';
 
 interface Prop
 {
@@ -35,16 +38,26 @@ class ShoppingCar extends Component<Prop, State>
             [style.itemList, style.itemListActive].join(' ') :
             style.itemList;
         return (
-            <div className={style.shoppingCar}>
-                <Button onPress={() => this.showCar()} auto>我的购物车</Button>
-                <ul className={carClass}>
-                    {
-                        this.props.items.map(({ item, index: id }, index) => (
-                            <li key={index}>{item.name}</li>
-                        ))
-                    }
-                </ul>
-            </div>
+            <appContext.Consumer>
+                {
+                    ({ userName, shoppingCar: { items } }) => (
+                        <div className={style.shoppingCar}>
+                            <div className={flexStyle.flexRow}>
+                                <FiShoppingCart className={style.icon} />
+                                <Button onPress={() => this.showCar()} auto>我的购物车</Button>
+                            </div>
+                            <ul className={carClass}>
+                                {
+                                    // this.props.
+                                    items.map(({ item, index: id }, index) => (
+                                        <li key={index}>{item.name}</li>
+                                    ))
+                                }
+                            </ul>
+                        </div>
+                    )
+                }
+            </appContext.Consumer>
         );
     }
 }
