@@ -3,7 +3,7 @@
 type lazyLoadArg = {
   $img?: HTMLElement | null;
   setStyle?: (resourceError?: boolean) => void;
-  whenCanSetStyle?: () => Promise<void>;
+  whenCanSetStyle: () => Promise<void>;
 };
 
 function lazyLoad({ $img, setStyle, whenCanSetStyle }: lazyLoadArg) {
@@ -39,19 +39,22 @@ function lazyLoad({ $img, setStyle, whenCanSetStyle }: lazyLoadArg) {
     handled = false,
     mounted = false,
     isError = false;
-  whenCanSetStyle &&
-    whenCanSetStyle()
-      .catch(() => {
-        isError = true;
-      })
-      .then(() => {
-        loaded = true;
-        if (handled || !mounted) return;
-        imgLoadedHandler();
-        handled = true;
-      });
+  // whenCanSetStyle &&
+  whenCanSetStyle()
+    .catch(() => {
+      isError = true;
+    })
+    .then(() => {
+      loaded = true;
+      if (handled || !mounted) return;
+      imgLoadedHandler();
+      handled = true;
+    });
 
-  function lazyLoad({ $img: $imgNew, setStyle: setStyleNew }: lazyLoadArg) {
+  function lazyLoad({
+    $img: $imgNew,
+    setStyle: setStyleNew,
+  }: Omit<lazyLoadArg, "whenCanSetStyle">) {
     if ($img) throw new Error("不支持给非空的节点引用$img重新赋值！");
     if (!$imgNew) throw new Error("lazyLoad函数必须传入$img参数！");
     // if ($img) return;// 不会发生，即使由值也需要更新，因为可能不是一个节点了
@@ -134,7 +137,7 @@ function imgLazyLoad(imgGet: () => HTMLImageElement | null, src: string) {
     }
   }
 
-  let _lazyLoad: typeof lazyLoad;
+  let _lazyLoad: (e: Omit<lazyLoadArg, "whenCanSetStyle">) => void;
 
   const $img = imgGet();
   if (
@@ -231,7 +234,7 @@ function webFontLazyLoad(
 
   loadFont(eleGet(), fontFamilyName, null);
 
-  let _lazyLoad: typeof lazyLoad;
+  let _lazyLoad: (e: Omit<lazyLoadArg, "whenCanSetStyle">) => void;
   // return Object.freeze({ loadFont, isLazyLoad: () => _isLazyLoaded });
 }
 
