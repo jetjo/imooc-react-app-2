@@ -30,7 +30,7 @@ class ShoppingCar extends Component<{}, State>
         };
     }
 
-    showCar()
+    toggleCar()
     {
         this.setState({ expand: !this.state.expand });
     }
@@ -58,9 +58,12 @@ class ShoppingCar extends Component<{}, State>
                         <div className={style.shoppingCar}>
                             <div className={flexStyle.flexRow}>
                                 <FiShoppingCart className={style.icon} />
-                                <Button onPress={() => this.showCar()} auto>我的购物车</Button>
+                                <Button onPress={() => this.toggleCar()} auto>我的购物车</Button>
                             </div>
-                            <ul className={carClass}>
+                            <ul
+                                className={carClass}
+                                onMouseLeave={() => this.toggleCar()}
+                            >
                                 {
                                     this.createItemNode(items)
                                 }

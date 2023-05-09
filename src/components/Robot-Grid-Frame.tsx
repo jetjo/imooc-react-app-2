@@ -45,28 +45,25 @@ function reducer(state: Item[], action: { type: DispatchType, id?: number, data?
 
 type Dispatch = (value: {
     type: DispatchType;
-    id?: number | undefined;
-    data?: Item | Item[] | undefined;
+    id?: number ;
+    data?: Item | Item[] ;
 }) => void;
 
 async function getUsers(dispatch: Dispatch)
 {
     const data = await list();
-    // data && setRobots([...data.data])
     Array.isArray(data?.data) && dispatch({ type: 'Assign', data: data.data });
 };
 
-function handleChange(id, robots: Item[], dispatch: Dispatch)
+function handleChange(id: Item["id"], robots: Item[], dispatch: Dispatch)
 {
     const item = robots.find(e => e.id === id);
     if (!item) return;
-    // setRobots([...robots.slice(0, i), { ...item, id: parseInt((Math.random() * 10000) + '') }, ...robots.slice(i + 1)]);
     dispatch({ type: 'Update', id, data: { id: parseInt((Math.random() * 10000) + '') } });
 }
 
 const RobotGridFrame = () =>
 {
-    // const [robots, setRobots] = useState<any[]>([]);
     const [robots, dispatch] = useReducer(reducer, []);
     useEffect(() =>
     {

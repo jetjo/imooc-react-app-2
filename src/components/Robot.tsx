@@ -26,9 +26,9 @@ interface Prop
 type Dispatch = React.Dispatch<{
     shoppingCar: {
         type: ShoppingCarActionType;
-        count?: number | undefined;
-        which?: ((data: unknown) => boolean) | undefined;
-        what?: (() => unknown) | undefined;
+        count?: number;
+        which?: ((data: unknown) => boolean);
+        what?: (() => unknown);
     };
 }>;
 
@@ -71,10 +71,11 @@ const Robot: React.FC<Prop> = ({ groupId, onChange, item }) =>
             <div ref={$img} className={style.cardImg} {...imgAttr} ></div>
             <h3 className={singleLineStyle}>{name}</h3>
             <p className={singleLineStyle}>{email}</p>
-            <Button onPress={() =>
-            {
-                handlePress(item, dispatch);
-            }} size='xs' auto>Add to 🛒</Button>
+            <Button
+                onPress={() => handlePress(item, dispatch)}
+                size='xs'
+                auto
+            >Add to 🛒</Button>
         </div>
     );
 };
