@@ -45,7 +45,7 @@ function handlePress(item: Prop['item'], dispatch?: Dispatch)
     }
 }
 
-const Robot: React.FC<Prop> = ({ groupId, onChange, item }) =>
+const Robot: React.FC<Prop> = ({ groupId, onChange, item }, ref) =>
 {
     const { id, name = '', email = '' } = item;
     const dispatch = useContext(appSetterContext);
