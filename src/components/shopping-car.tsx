@@ -6,24 +6,27 @@ import flexStyle from '../assets/styles/css/flex-row.module.css';
 import { FiShoppingCart } from "react-icons/fi";
 import { appContext } from '@/App.context';
 
-interface Prop
-{
-    items: any[];
-}
 interface State
 {
     expand: boolean;
 }
 
-class ShoppingCar extends Component<Prop, State>
+interface Item
 {
+    item: {
+        id: number;
+        name: string;
+    };
+    count: number;
+}
 
+class ShoppingCar extends Component<{}, State>
+{
     constructor(props)
     {
         super(props);
         this.state = {
-            expand: false,
-            // items: []
+            expand: false
         };
     }
 
@@ -32,11 +35,22 @@ class ShoppingCar extends Component<Prop, State>
         this.setState({ expand: !this.state.expand });
     }
 
+    createItemNode(items: Item[])
+    {
+        return items.map(({ item, count }, index) => (
+            <li key={index}>
+                <span>{item.name}</span>
+                <span>({count})</span>
+            </li>
+        ));
+    }
+
     render(): React.ReactNode
     {
         const carClass = this.state.expand ?
             [style.itemList, style.itemListActive].join(' ') :
             style.itemList;
+
         return (
             <appContext.Consumer>
                 {
@@ -48,10 +62,7 @@ class ShoppingCar extends Component<Prop, State>
                             </div>
                             <ul className={carClass}>
                                 {
-                                    // this.props.
-                                    items.map(({ item, index: id }, index) => (
-                                        <li key={index}>{item.name}</li>
-                                    ))
+                                    this.createItemNode(items)
                                 }
                             </ul>
                         </div>

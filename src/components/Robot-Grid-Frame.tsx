@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer } from "react";
 // import _robots from '@/mock-data/robots.json';
 import Robot from "./Robot";
 import { v4 as uuidv4 } from 'uuid';
@@ -8,58 +8,77 @@ const groupId = uuidv4();
 
 interface Item
 {
-    name: string;
-    email: string;
+    // [key: string]: unknown;
     id: number;
-    groupId: string;
 }
 
-interface Prop
+type DispatchType = 'Assign' | 'Remove' | 'Update';
+
+function reducer(state: Item[], action: { type: DispatchType, id?: number, data?: Item[] | Item; }): Item[]
 {
-    addToCar: {
-        (id: number): void;
-        (item: Item | any): void;
-    };
+    function isItems(data): data is Item[]
+    {
+        if (!Array.isArray(data)) throw Error(`action type: ${ action.type }时, 参数action.data必须是数组！`, { cause: action });
+        return true;
+    }
+    function isItem(data): data is Item
+    {
+        if (Array.isArray(data) || data === undefined) throw Error(`action type: ${ action.type }时, 参数action.data必须兼容Item类型！`, { cause: action });
+        return true;
+    }
+    if (action.type === 'Assign' && isItems(action.data)) return action.data;
+    else if (action.type === 'Remove') return state.filter(e => e.id !== action.id);
+    else if (action.type === 'Update' && isItem(action.data))
+    {
+        const data = action.data;
+        return state.map(e =>
+        {
+            if (e.id === action.id)
+            {
+                return { ...e, ...data };
+            }
+            return e;
+        });
+    }
+    else return state;
 }
 
-const RobotGridFrame: React.FC<Prop> = ({ addToCar }) =>
+type Dispatch = (value: {
+    type: DispatchType;
+    id?: number | undefined;
+    data?: Item | Item[] | undefined;
+}) => void;
+
+async function getUsers(dispatch: Dispatch)
 {
-    const [robots, setRobots] = useState<any[]>([]);
+    const data = await list();
+    // data && setRobots([...data.data])
+    Array.isArray(data?.data) && dispatch({ type: 'Assign', data: data.data });
+};
+
+function handleChange(id, robots: Item[], dispatch: Dispatch)
+{
+    const item = robots.find(e => e.id === id);
+    if (!item) return;
+    // setRobots([...robots.slice(0, i), { ...item, id: parseInt((Math.random() * 10000) + '') }, ...robots.slice(i + 1)]);
+    dispatch({ type: 'Update', id, data: { id: parseInt((Math.random() * 10000) + '') } });
+}
+
+const RobotGridFrame = () =>
+{
+    // const [robots, setRobots] = useState<any[]>([]);
+    const [robots, dispatch] = useReducer(reducer, []);
     useEffect(() =>
     {
-        const getUsers = async () =>
-        {
-            const data = await list();
-            data && setRobots([...data.data]);
-        };
-        getUsers();
+        getUsers(dispatch);
     }, []);
     return (<>{
         robots.map((r, i) =>
             <Robot
-                item={{ item: r, index: i }}
                 key={r.id}
-                {...r}
+                item={r}
                 groupId={groupId}
-
-                onChange={
-                    (id) =>
-                    {
-                        const item = robots.find(e => e.id === id);
-                        if (!item) return;
-                        const i = robots.indexOf(item);
-                        setRobots([...robots.slice(0, i), { ...item, id: parseInt((Math.random() * 10000) + '') }, ...robots.slice(i + 1)]);
-                    }
-                }
-
-                addToCar={
-                    (id) =>
-                    {
-                        const item = robots.find(e => e.id === id);
-                        if (!item) return;
-                        addToCar(item);
-                    }
-                }
+                onChange={(id) => handleChange(id, robots, dispatch)}
             />
         )
     }</>);

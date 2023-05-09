@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import logo from './logo.svg';
 import RobotGridFrame from './components/Robot-Grid-Frame';
@@ -61,15 +61,12 @@ const theme = createTheme({
 
 function App()
 {
-  const [items, setItems] = useState<any[]>([]);
   // const { loadFont, isLazyLoad } = webFontLazyLoad(layout['newbee-black--font-style'], {});//TODO: 开发模式下会连着执行两次渲染函数，所以移到此处
   // const h1Style = isLazyLoad() ? {} : { opacity: '1' };
 
   // const items = [];
   // function setItems()
-  // {
 
-  // }
   return (
     <NextUIProvider theme={theme}>
       <AppStateProvider>
@@ -77,17 +74,10 @@ function App()
           <img id={logoId} className={layout.headerLogo} src={logo} alt="logo" />
           <h1 id={id} className={textStyle.textHidden} >{TITLE}</h1>
         </div>
-        <ShoppingCar items={items} />
+        <ShoppingCar />
         <div className={[boxStyle.flexGrid, layout.main].join(' ')}>
           {/* <TestHacker/> */}
-          {/* render robots list */}
-          <RobotGridFrame addToCar={
-            (item) => 
-            {
-              // items.push({ item, index: items.length });
-              setItems([...items, { item, index: items.length }]);
-            }
-          } />
+          <RobotGridFrame />
         </div>
       </AppStateProvider>
     </NextUIProvider>

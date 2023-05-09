@@ -1,17 +1,16 @@
 // App.context.tsx
-import { type } from "os";
-import React, { createContext, FC } from "react";
+import React, { createContext } from "react";
 import { useImmerReducer } from 'use-immer';
 
 interface IAppState
 {
     userName: string;
     shoppingCar: {
-        items: { item: any, index: number }[];
+        items: { item: any, count: number; }[];
     };
 }
 
-const defaultAppContext:IAppState = {
+const defaultAppContext: IAppState = {
     userName: 'bing',
     shoppingCar: {
         items: []
@@ -19,36 +18,79 @@ const defaultAppContext:IAppState = {
 };
 
 export const appContext = createContext(defaultAppContext);
-export const appSetterContext = createContext<React.Dispatch<Action>|undefined>(undefined);
+export const appSetterContext = createContext<React.Dispatch<Action> | undefined>(undefined);
 
-type ShoppingCarActionType = "AddToShoppingCar" | "RemoveFromShoppingCar" | "UpdateItemInShoppingCar";
+/* const */
+export enum ShoppingCarActionType
+{
+    Add = 1,
+    Clear = -2,
+    Remove = -1,
+    SetItemCount = 0,
+}
 type Action = {
     shoppingCar: {
         type: ShoppingCarActionType;
-        index: number;
-        id: number;
-        data?: any
-    }
-}
+        count?: number;
+        which?: {
+            (data: unknown): boolean;
+        };
+        what?: {
+            (): unknown;
+        };
+    };
+};
 
-function shoppingCarReducer(draft: IAppState, {shoppingCar: action}: Action)
+function shoppingCarReducer(draft: IAppState, { shoppingCar: action }: Action)
 {
-    if (action.type === 'RemoveFromShoppingCar')
+    requireSupportType();
+    function requireSupportType()
     {
-        draft.shoppingCar.items.splice(action.index, 1);
+        const ts = Object.keys(ShoppingCarActionType);
+        for (const t of ts)
+        {
+            if (action.type === ShoppingCarActionType[t]) return;
+        }
+        throw Error(`不支持${ action.type }操作！`, { cause: action });
     }
-    else if (action.type === 'AddToShoppingCar')
+    function requireWhich()
     {
-        draft.shoppingCar.items.push(action.data)
+        if (!action.which) throw Error(`action type: ${ action.type }时, 参数action.which不呢为空！`, { cause: action });
     }
-    else if (action.type === 'UpdateItemInShoppingCar')
+    function requireWhat()
     {
-        const d = draft.shoppingCar.items[action.index];
-        draft.shoppingCar.items[action.index] = {...d, ...action.data}
+        if (!action.what) throw Error(`action type: ${ action.type }时, 参数action.what不呢为空！`, { cause: action });
+    }
+    function requireCount() // (count: number | undefined): count is number// | never
+    {
+        if (!(action.count! > 0)) throw Error(`action type: ${ action.type }时, 参数action.count必须大于0`, { cause: action });
+        // return true;
+    }
+    const items = draft.shoppingCar.items;
+    if (action.type === ShoppingCarActionType.Remove)
+    {
+        requireWhich();
+        draft.shoppingCar.items = items.filter(e => !action.which!(e.item));
+    }
+    else if (action.type === ShoppingCarActionType.Add)
+    {
+        requireWhat();
+        draft.shoppingCar.items = [...items, { item: action.what!(), count: 1 }];
+    }
+    else if(action.type === ShoppingCarActionType.SetItemCount)
+    {
+        requireWhich();
+        requireCount();
+        draft.shoppingCar.items = items.map(e =>
+        {
+            if (action.which!(e.item))
+                return { ...e, count: action.count! };
+            else return e;
+        });
     }
     else
     {
-        throw new Error(`不支持${action.type}操作！`)
+        draft.shoppingCar.items = [];
     }
 }
 
@@ -60,7 +102,7 @@ function reducer(draft: IAppState, action: Action)
     }
     else
     {
-        throw new Error(`不支持${ action }操作！`)
+        throw Error(`不支持${ action }操作！`, { cause: action });
     }
 }
 
