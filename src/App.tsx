@@ -49,16 +49,9 @@ const theme = createTheme({
   }
 });
 
-// const items: any[] = [];
-
 function App()
 {
   // const { loadFont, isLazyLoad } = webFontLazyLoad(layout['newbee-black--font-style'], {});//TODO: 开发模式下会连着执行两次渲染函数，所以移到此处
-  // const h1Style = isLazyLoad() ? {} : { opacity: '1' };
-
-  // const items = [];
-  // function setItems()
-
   return (
     <NextUIProvider theme={theme}>
       <AppStateProvider>

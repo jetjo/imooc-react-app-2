@@ -81,7 +81,7 @@ function lazyLoad({ $img, setStyle, whenCanSetStyle }: lazyLoadArg) {
   return lazyLoad; // if (!$img)
 }
 
-function imgLazyLoad(imgGet: () => HTMLImageElement | null, src: string) {
+function imgLazyLoad<T extends HTMLElement>(imgGet: () => T|null, src: string) {
   function setStyle($img, src, isError) {
     if (isError) return;
     // $img &&
@@ -152,7 +152,7 @@ function imgLazyLoad(imgGet: () => HTMLImageElement | null, src: string) {
   const $img = imgGet();
   if (
     !$img ||
-    ($img.src !== src && $img.style.backgroundImage.indexOf(src) === -1)
+    ($img.style.backgroundImage.indexOf(src) === -1)
   ) {
     loadImg(null, src);
   }

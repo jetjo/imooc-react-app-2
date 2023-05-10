@@ -18,17 +18,18 @@ function reducer(
     return true;
   }
   function isItem(data): data is Item {
-    if (Array.isArray(data) || data === undefined || typeof data !== 'object')
+    if (Array.isArray(data) || data === undefined || typeof data !== "object")
       throw Error(
         `action type: ${action.type}时, 参数action.data必须兼容Item类型！`,
         { cause: action }
       );
     return true;
   }
-  if (action.type === "Assign" && isItems(action.data)) return action.data;
-  else if (action.type === "Remove")
+  if (action.type === "Assign" && isItems(action.data)) {
+    return action.data;
+  } else if (action.type === "Remove") {
     return state.filter((e) => e.id !== action.id);
-  else if (action.type === "Update" && isItem(action.data)) {
+  } else if (action.type === "Update" && isItem(action.data)) {
     const data = action.data;
     return state.map((e) => {
       if (e.id === action.id) {
@@ -36,7 +37,9 @@ function reducer(
       }
       return e;
     });
-  } else return state;
+  } else {
+    return state;
+  }
 }
 
 export default reducer;

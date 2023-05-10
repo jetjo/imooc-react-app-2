@@ -2,7 +2,7 @@
 import React, { createContext } from "react";
 import { useImmerReducer } from 'use-immer';
 
-import { shoppingCarReducer, ShoppingCarActionType, shoppingCar } from "./model/shoppingCar";
+import { shoppingCarReducer, shoppingCar } from "./model/shoppingCar";
 
 interface IAppState
 {
@@ -48,6 +48,6 @@ const AppStateProvider = (props) =>
     );
 };
 
-export { appContext, appSetterContext, ShoppingCarActionType };
+export { appContext, appSetterContext };
 
 export default AppStateProvider;

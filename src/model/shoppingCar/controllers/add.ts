@@ -1,6 +1,6 @@
 // controller.ts
 import React from "react";
-import { ShoppingCarActionType } from "@/App.context";
+import { ShoppingCarActionType, shoppingCarReducer } from "..";
 
 interface Item {
   [k: string]: any;
@@ -8,12 +8,7 @@ interface Item {
 }
 
 type Dispatch = React.Dispatch<{
-  shoppingCar: {
-    type: ShoppingCarActionType;
-    count?: number;
-    which?: (data: unknown) => boolean;
-    what?: () => unknown;
-  };
+  shoppingCar: Parameters<typeof shoppingCarReducer>[1];
 }>;
 
 function handleAddToCar(item: Item, dispatch?: Dispatch) {
