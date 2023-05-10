@@ -1,22 +1,14 @@
-import React from 'react';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import logo from './logo.svg';
-import RobotGridFrame from './components/Robot-Grid-Frame';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import TestHacker from './hack攻击防范';
+import RobotGridFrame from './components/robots/Robot-Grid-Frame';
 import boxStyle from './assets/styles/css/flex-grid.module.css';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import cardStyle from './assets/styles/css/card.module.css';
 import layout from './App.module.css';
 import textStyle from './assets/styles/css/single-line.module.css';
-// import { webFontLazyLoad } from './utils/lazy-load';
-// import { v4 as uuidv4 } from 'uuid';
 
 import { createTheme, NextUIProvider } from '@nextui-org/react';
 // 在NextUI后导入nextui-style-reset.css
 import '@/assets/styles/nextui-style-reset.css';
 
-import ShoppingCar from './components/shopping-car';
+import ShoppingCar from './components/shopping-car/shopping-car';
 
 import AppStateProvider from './App.context';
 

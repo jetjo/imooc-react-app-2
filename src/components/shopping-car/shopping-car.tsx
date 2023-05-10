@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { Button } from '@nextui-org/react';
 import style from './shopping-car.module.css';
-import flexStyle from '../assets/styles/css/flex-row.module.css';
+import flexStyle from '../../assets/styles/css/flex-row.module.css';
 import { FiShoppingCart } from "react-icons/fi";
 import { appContext } from '@/App.context';
 

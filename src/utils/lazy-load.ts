@@ -25,9 +25,19 @@ function lazyLoad({ $img, setStyle, whenCanSetStyle }: lazyLoadArg) {
       setStyle(isError);
       $img.style.opacity = `1`;
     }
-    // if (!$img || isError) return;
-    if (!$img || isError)
-      throw new Error("imgLoadedHandler函数必须传入$img参数！"); // TODO: $img如果是空，就不应该执行到此处！！！
+    if (isError)
+      throw Error("资源预加载失败！", {
+        cause: {
+          $img,
+          setStyle,
+          whenCanSetStyle,
+          loaded,
+          handled,
+          mounted,
+          isError,
+        },
+      });
+    if (!$img) throw new Error("imgLoadedHandler函数必须传入$img参数！"); // TODO: $img如果是空，就不应该执行到此处！！！
     setTimeout(() => {
       transitionHandler.call($img);
     }, 500);

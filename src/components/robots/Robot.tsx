@@ -1,15 +1,14 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable jsx-a11y/alt-text */
-import React, { useEffect, useRef, useState, useContext, useMemo } from 'react';
-import cardStyle from '../assets/styles/css/card.module.css';
+import React, { useContext, useMemo } from 'react';
+import cardStyle from '../../assets/styles/css/card.module.css';
 import style from './Robot.module.css';
-import textStyle from '../assets/styles/css/single-line.module.css';
+import textStyle from '../../assets/styles/css/single-line.module.css';
 import loadingPic from "@/assets/images/Spinner-1s-200px.gif";
 import { appSetterContext, ShoppingCarActionType } from '@/App.context';
 
-import { imgLazyLoad } from '@/utils/lazy-load';
 
 import { Button } from '@nextui-org/react';
+
+import withImgPreLoad from '../withImgPreLoad';
 
 interface Prop
 {
@@ -45,14 +44,11 @@ function handlePress(item: Prop['item'], dispatch?: Dispatch)
     }
 }
 
-const Robot: React.FC<Prop> = ({ groupId, onChange, item }, ref) =>
+// const Robot: React.FC<Prop> = ({ groupId, onChange, item }, ref) =>
+function Robot({ groupId, onChange, item }, $img)
 {
     const { id, name = '', email = '' } = item;
     const dispatch = useContext(appSetterContext);
-    const $img = useRef<HTMLImageElement>(null);
-    const src = `https://robohash.org/${ id }`;
-
-    imgLazyLoad(() => $img.current, src);
 
     const imgAttr = useMemo(() => ({
         id: id + groupId,
@@ -80,5 +76,5 @@ const Robot: React.FC<Prop> = ({ groupId, onChange, item }, ref) =>
     );
 };
 
-export default Robot;
+export default withImgPreLoad(Robot);
 

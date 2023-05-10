@@ -1,6 +1,6 @@
 // withImgPreLoad.tsx
 import { imgLazyLoad } from "@/utils/lazy-load";
-import React, { forwardRef, ForwardRefRenderFunction, useContext, useMemo, useRef } from "react";
+import { forwardRef, ForwardRefRenderFunction, useRef } from "react";
 
 // TODO: 参数名ChildCom首字母必须大写。。。
 // TODO: 否则报错：类型“JSX.IntrinsicElements”上不存在属性“childCom”。ts(2339)

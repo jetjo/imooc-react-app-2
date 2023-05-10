@@ -25,12 +25,24 @@ function lazyLoad ( _a )
       setStyle( $img.style, isError );
       $img.style.opacity = "1";
     }
-    // if (!$img || isError) return;
-    if ( !$img || isError )
+    if ( isError )
+      throw Error( "资源预加载失败！", {
+        cause: {
+          $img,
+          setStyle,
+          whenCanSetStyle,
+          loaded,
+          handled,
+          mounted,
+          isError,
+        },
+      } );
+    if ( !$img )
       throw new Error( "imgLoadedHandler函数必须传入$img参数！" ); // TODO: $img如果是空，就不应该执行到此处！！！
-    setTimeout(() => {
+    setTimeout( () =>
+    {
       transitionHandler.call( $img );
-    }, 500);
+    }, 500 );
     $img.addEventListener( "transitionend", transitionHandler );
     $img.style.opacity = "0";
     // window.alert('开始过渡效果...')
