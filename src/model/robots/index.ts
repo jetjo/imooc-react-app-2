@@ -18,7 +18,7 @@ function reducer(
     return true;
   }
   function isItem(data): data is Item {
-    if (Array.isArray(data) || data === undefined || typeof data === 'object')
+    if (Array.isArray(data) || data === undefined || typeof data !== 'object')
       throw Error(
         `action type: ${action.type}时, 参数action.data必须兼容Item类型！`,
         { cause: action }
