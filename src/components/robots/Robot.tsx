@@ -1,9 +1,11 @@
-import React, { useContext, useMemo } from 'react';
+import { ReactElement, useContext, useMemo } from 'react';
 import cardStyle from '../../assets/styles/css/card.module.css';
 import style from './Robot.module.css';
 import textStyle from '../../assets/styles/css/single-line.module.css';
 import loadingPic from "@/assets/images/Spinner-1s-200px.gif";
-import { appSetterContext, ShoppingCarActionType } from '@/App.context';
+import { appSetterContext } from '@/App.context';
+
+import handleAddPress from '@/model/shoppingCar/controllers/add';
 
 
 import { Button } from '@nextui-org/react';
@@ -16,36 +18,11 @@ interface Prop
     onChange: {
         (id: number): void;
     };
-    item: {
-        [k: string]: any;
-        id: number;
-    };
-}
-
-type Dispatch = React.Dispatch<{
-    shoppingCar: {
-        type: ShoppingCarActionType;
-        count?: number;
-        which?: ((data: unknown) => boolean);
-        what?: (() => unknown);
-    };
-}>;
-
-function handlePress(item: Prop['item'], dispatch?: Dispatch)
-{
-    if (dispatch)
-    {
-        dispatch({
-            shoppingCar: {
-                type: ShoppingCarActionType.Add,
-                what: () => ({ ...item })
-            }
-        });
-    }
+    item: Parameters<typeof handleAddPress>[0];
 }
 
 // const Robot: React.FC<Prop> = ({ groupId, onChange, item }, ref) =>
-function Robot({ groupId, onChange, item }, $img)
+const Robot: React.ForwardRefRenderFunction<HTMLImageElement, Prop> = function({ groupId, onChange, item }, $img)
 {
     const { id, name = '', email = '' } = item;
     const dispatch = useContext(appSetterContext);
@@ -68,7 +45,7 @@ function Robot({ groupId, onChange, item }, $img)
             <h3 className={singleLineStyle}>{name}</h3>
             <p className={singleLineStyle}>{email}</p>
             <Button
-                onPress={() => handlePress(item, dispatch)}
+                onPress={() => handleAddPress(item, dispatch)}
                 size='xs'
                 auto
             >Add to 🛒</Button>
