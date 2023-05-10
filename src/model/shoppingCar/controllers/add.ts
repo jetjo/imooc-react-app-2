@@ -16,7 +16,7 @@ type Dispatch = React.Dispatch<{
   };
 }>;
 
-function handlePress(item: Item, dispatch?: Dispatch) {
+function handleAddToCar(item: Item, dispatch?: Dispatch) {
   if (dispatch) {
     dispatch({
       shoppingCar: {
@@ -27,4 +27,4 @@ function handlePress(item: Item, dispatch?: Dispatch) {
   }
 }
 
-export default handlePress;
+export default handleAddToCar;
