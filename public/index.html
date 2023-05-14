@@ -23,79 +23,12 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>React App</title>
-    <style>
-      h1.newbee-black--font-style {
-        /* opacity: 1; */
-        font-family: "Newbee Black";
-        font-size: 5rem;
-        font-weight: bold;
-        line-height: 1;
-        text-indent: 0px;
-        letter-spacing: 0px;
-      }
 
-    </style>
-
-    <script src="./lazy-load.js"></script>
-    <script type="module">
-      // import lazyLoad  from './lazy-load.js';
-      import { v4 as uuidv4 } from 'https://jspm.dev/uuid';
-      const fontFamilyName = 'Newbee Black';
-      const TEST_TEXT = '罗伯特';
-      const id = window.h1_id = uuidv4();
-      window.logo_id = uuidv4();
-
-      const { loadFont, isLazyLoad } = window.webFontLazyLoad( 'newbee-black--font-style', {} );
-      loadFont( null, fontFamilyName, TEST_TEXT );
-      const timer = setInterval( () =>
-      {
-        const $ele = document.getElementById( id );
-        if ( !$ele ) return;
-        clearInterval( timer );
-        loadFont( $ele, fontFamilyName, TEST_TEXT );
-      }, 100 );
-
-
-  // const timer1 = setInterval(() =>
-  // {
-  //   const $logo = document.getElementById(logoId);
-  //   if ($logo)
-  //   {
-  //     $logo.style.opacity = '1';
-  //     clearInterval(timer1);
-  //   }
-  // }, 100);
-
-    </script>
   </head>
 
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
 
-    <script>
-      window.nodeResourceLazyLoadQueue = [];
-      const domMutationObsConf = { attributes: false, childList: true, subtree: true };
-
-      const domObs = new MutationObserver( ( mutationList ) =>
-      {
-        // console.log('节点更新！');
-        const cbs = [...window.nodeResourceLazyLoadQueue];
-        for ( const mutation of mutationList )
-        {
-          cbs.forEach(cb => cb(mutation));
-          // console.log( 'dom node update: ', mutation );
-        }
-      } );
-
-      domObs.observe( window.document.body, domMutationObsConf );
-
-      window.addEventListener( 'unload', () =>
-      {
-        window.alert( 'unload?' );
-        domObs.disconnect();
-      } );
-
-    </script>
     <div id="root"></div>
 
     <!--

@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import cardStyle from '../../assets/styles/css/card.module.css';
 import style from './Robot.module.css';
 import textStyle from '../../assets/styles/css/single-line.module.css';
@@ -7,8 +7,6 @@ import loadingPic from "@/assets/images/Spinner-1s-200px.gif";
 import useAddToCar from '@/hooks/use-add-to-car';
 
 import { Button } from '@nextui-org/react';
-
-import withImgPreLoad from '../withImgPreLoad';
 
 interface Prop
 {
@@ -19,9 +17,10 @@ interface Prop
     item: Parameters<typeof useAddToCar>[0];
 }
 
-// const Robot: React.FC<Prop> = ({ groupId, onChange, item }, ref) =>
-const Robot: React.ForwardRefRenderFunction<HTMLDivElement, Prop> = function({ groupId, onChange, item }, $img)
+const Robot: React.FC<Prop> = ({ groupId, onChange, item }) =>
 {
+    const $img = useRef( null );
+    
     const { id, name = '', email = '' } = item;
 
     const imgAttr = useMemo(() => ({
@@ -52,5 +51,5 @@ const Robot: React.ForwardRefRenderFunction<HTMLDivElement, Prop> = function({ g
     );
 };
 
-export default withImgPreLoad(Robot, ({item}) => `https://robohash.org/${ item.id }`);
+export default Robot;
 
