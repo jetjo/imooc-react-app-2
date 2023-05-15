@@ -1,25 +1,18 @@
 import logo from './logo.svg';
-import RobotGridFrame from './components/robots/Robot-Grid-Frame';
-import boxStyle from './assets/styles/css/flex-grid.module.css';
-import layout from './App.module.css';
-import textStyle from './assets/styles/css/single-line.module.css';
+import RobotGridFrame from './components/robots/robot-set';
+import style from './app.module.css';
 
 import { createTheme, NextUIProvider } from '@nextui-org/react';
 // 在NextUI后导入nextui-style-reset.css
-import '@/assets/styles/nextui-style-reset.css';
+import '@/assets/styles/css/nextui-style-reset.css';
 
 import ShoppingCar from './components/shopping-car/shopping-car';
 
-import AppStateProvider from './App.context';
+import AppStateProvider from './app.context';
 
-// const { loadFont, isLazyLoad } = webFontLazyLoad();
-// const fontFamilyName = 'Newbee Black';
 const TITLE = '罗伯特吊炸天机器人';
-// const TEST_TEXT = '罗伯特';
-const id = window.h1_id; //uuidv4();
-const logoId = window.logo_id; //uuidv4();
 
-const theme = createTheme({
+const theme = createTheme( {
   type: "light", // it could be "light" or "dark"
   theme: {
     colors: {
@@ -47,21 +40,22 @@ const theme = createTheme({
     space: {},
     fonts: {}
   }
-});
+} );
 
-function App()
+function App ()
 {
-  // const { loadFont, isLazyLoad } = webFontLazyLoad(layout['newbee-black--font-style'], {});//TODO: 开发模式下会连着执行两次渲染函数，所以移到此处
   return (
-    <NextUIProvider theme={theme}>
+    <NextUIProvider theme={ theme }>
       <AppStateProvider>
-        <div className={layout.header}>
-          <img id={logoId} className={layout.headerLogo} src={logo} alt="logo" />
-          <h1 id={id} className={textStyle.textHidden} >{TITLE}</h1>
+        <div className={ style.header }>
+          <img src={ logo } alt="logo" />
+          <h1 className={ style.newbeeBlack } >{ TITLE }</h1>
         </div>
-        <ShoppingCar />
-        <div className={[boxStyle.flexGrid, layout.main].join(' ')}>
-          {/* <TestHacker/> */}
+        <div className={ style.middle }>
+          <ShoppingCar />
+        </div>
+        <div className={ style.main }>
+          {/* <TestHacker/> */ }
           <RobotGridFrame />
         </div>
       </AppStateProvider>

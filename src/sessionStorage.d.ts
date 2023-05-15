@@ -2,7 +2,7 @@ declare global
 {
     interface Storage
     {
-        loadedFontFaces: string[]
+        
     }
 }
 

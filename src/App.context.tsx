@@ -2,7 +2,7 @@
 import React, { createContext } from "react";
 import { useImmerReducer } from 'use-immer';
 
-import { shoppingCarReducer, shoppingCar } from "./model/shoppingCar";
+import { shoppingCarReducer, shoppingCar } from "./model/shopping-car";
 
 interface IAppState
 {

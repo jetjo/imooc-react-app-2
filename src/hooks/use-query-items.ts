@@ -9,9 +9,14 @@ type Item = Parameters<typeof reducer>[0][0];
 type Dispatch = Parameters<typeof getItems>[0];
 
 const useQueryItems = (): [Item[], Dispatch] => {
-  const [robots, dispatch] = useReducer(reducer, [..._robots]);
+  const [robots, dispatch] = useReducer(
+    reducer,
+    !window.isDebug
+      ? _robots.map((e) => ({ ...e, id: -1 * e.id }))
+      : [_robots.map((e) => ({ ...e, id: -1 * e.id }))[0]]
+  );
   useEffect(() => {
-    getItems(dispatch);
+    !window.isDebug && getItems(dispatch);
   }, []);
   return [robots, dispatch];
 };

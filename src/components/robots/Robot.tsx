@@ -1,7 +1,5 @@
-import { useMemo, useRef } from 'react';
-import cardStyle from '../../assets/styles/css/card.module.css';
-import style from './Robot.module.css';
-import textStyle from '../../assets/styles/css/single-line.module.css';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import style from './robot.module.css';
 import loadingPic from "@/assets/images/Spinner-1s-200px.gif";
 
 import useAddToCar from '@/hooks/use-add-to-car';
@@ -10,40 +8,71 @@ import { Button } from '@nextui-org/react';
 
 interface Prop
 {
-    groupId: string;
     onChange: {
-        (id: number): void;
+        ( id: number ): void;
     };
-    item: Parameters<typeof useAddToCar>[0];
+    item: Parameters<typeof useAddToCar>[ 0 ];
 }
 
-const Robot: React.FC<Prop> = ({ groupId, onChange, item }) =>
+var tt;
+
+const Robot: React.FC<Prop> = ( { onChange, item } ) =>
 {
-    const $img = useRef( null );
-    
+    const $img = useRef<HTMLImageElement>();
+    const [ state, setState ] = useState( { loading: true } );
+
+    if ( !$img.current && ( item.id > 0 || window.isDebug ) )
+    {
+        $img.current = new Image();
+        $img.current.addEventListener( 'load', () =>
+        {
+            setState( { loading: false } );
+        } );
+        $img.current.src = `https://robohash.org/${ item.id }`;
+    }
+
     const { id, name = '', email = '' } = item;
 
-    const imgAttr = useMemo(() => ({
-        id: id + groupId,
-        opacity: 1,
-        style: {
-            backgroundImage: `url(${ loadingPic })`
-        }
-    }), [id, groupId]);
+    const imgAttr = useMemo( () =>
+    {
+        return {
+            style: {
+                backgroundImage: state.loading ? `url(${ loadingPic })` : `url(https://robohash.org/${ id })`
+            }
+        };
+    }, [ id, state ] );
 
-    const handlePress = useAddToCar(item);
+    useEffect( () =>
+    {
+        console.log( 'every render...' );
+    } );
+    useEffect( () =>
+    {
+        console.log( 'only render...' );
+    }, [] );
+    useEffect( () =>
+    {
+        console.log( 'every render...' );
+    }, [ state ] );
+    useEffect( () =>
+    {
+        console.log( 'every render...' );
+    }, [ id ] );
 
-    const boxStyle = [cardStyle.card, cardStyle.cardVerticalPicTextStyle, style.card].join(' ');
-    const singleLineStyle = [textStyle.textCenter, textStyle.textHidden].join(' ');
+    const handlePress = useAddToCar( item );
+
+    const ff = tt === handlePress;
+    tt = handlePress;
+
     return (
         <div
-            onClick={() => onChange(id)}
-            className={boxStyle}>
-            <div ref={$img} className={style.cardImg} {...imgAttr} ></div>
-            <h3 className={singleLineStyle}>{name}</h3>
-            <p className={singleLineStyle}>{email}</p>
+            onClick={ () => onChange( id ) }
+            className={ style.card }>
+            <div className={ style.cardImg } { ...imgAttr } ></div>
+            <h3 >{ name }</h3>
+            <p >{ email }</p>
             <Button
-                onPress={handlePress}
+                onPress={ handlePress }
                 size='xs'
                 auto
             >Add to 🛒</Button>

@@ -2,9 +2,8 @@
 import React, { Component } from 'react';
 import { Button } from '@nextui-org/react';
 import style from './shopping-car.module.css';
-import flexStyle from '../../assets/styles/css/flex-row.module.css';
 import { FiShoppingCart } from "react-icons/fi";
-import { appContext } from '@/App.context';
+import { appContext } from '@/app.context';
 
 interface State
 {
@@ -22,51 +21,51 @@ interface Item
 
 class ShoppingCar extends Component<{}, State>
 {
-    constructor(props)
+    constructor ( props )
     {
-        super(props);
+        super( props );
         this.state = {
             expand: false
         };
-        this.toggleCar = this.toggleCar.bind(this);
+        this.toggleCar = this.toggleCar.bind( this );
     }
 
-    toggleCar()
+    toggleCar ()
     {
-        this.setState({ expand: !this.state.expand });
+        this.setState( { expand: !this.state.expand } );
     }
 
-    createItemNode(items: Item[])
+    createItemNode ( items: Item[] )
     {
-        return items.map(({ item, count }, index) => (
-            <li key={index}>
-                <span>{item.name}</span>
-                <span>({count})</span>
+        return items.map( ( { item, count }, index ) => (
+            <li key={ index }>
+                <span>{ item.name }</span>
+                <span>({ count })</span>
             </li>
-        ));
+        ) );
     }
 
-    render(): React.ReactNode
+    render (): React.ReactNode
     {
         const carClass = this.state.expand ?
-            [style.itemList, style.itemListActive].join(' ') :
+            [ style.itemList, style.itemListActive ].join( ' ' ) :
             style.itemList;
 
         return (
             <appContext.Consumer>
                 {
-                    ({ userName, shoppingCar: { items } }) => (
-                        <div className={style.shoppingCar}>
-                            <div className={flexStyle.flexRow}>
-                                <FiShoppingCart className={style.icon} />
-                                <Button onPress={this.toggleCar} auto>我的购物车</Button>
+                    ( { userName, shoppingCar: { items } } ) => (
+                        <div className={ style.shoppingCar }>
+                            <div>
+                                <FiShoppingCart className={ style.icon } />
+                                <Button onPress={ this.toggleCar } auto>我的购物车</Button>
                             </div>
                             <ul
-                                className={carClass}
-                                onMouseLeave={this.toggleCar}
+                                className={ carClass }
+                                onMouseLeave={ this.toggleCar }
                             >
                                 {
-                                    this.createItemNode(items)
+                                    this.createItemNode( items )
                                 }
                             </ul>
                         </div>
