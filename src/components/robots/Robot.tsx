@@ -42,27 +42,27 @@ const Robot: React.FC<Prop> = ( { onChange, item } ) =>
         };
     }, [ id, state ] );
 
-    useEffect( () =>
-    {
-        console.log( 'every render...' );
-    } );
-    useEffect( () =>
-    {
-        console.log( 'only render...' );
-    }, [] );
-    useEffect( () =>
-    {
-        console.log( 'every render...' );
-    }, [ state ] );
-    useEffect( () =>
-    {
-        console.log( 'every render...' );
-    }, [ id ] );
+    // useEffect( () =>
+    // {
+    //     console.log( 'every render...' );
+    // } );
+    // useEffect( () =>
+    // {
+    //     console.log( 'only render...' );
+    // }, [] );
+    // useEffect( () =>
+    // {
+    //     console.log( 'every render...' );
+    // }, [ state ] );
+    // useEffect( () =>
+    // {
+    //     console.log( 'every render...' );
+    // }, [ id ] );
+
+    // const ff = tt === handlePress;
+    // tt = handlePress;
 
     const handlePress = useAddToCar( item );
-
-    const ff = tt === handlePress;
-    tt = handlePress;
 
     return (
         <div
